@@ -6,7 +6,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 URL = "http://172.16.48.215:7080/mb/fileNet/cargaArchivo"
 
 # Credenciales (ya vienen en base64 normalmente, pero aquí lo dejamos directo)
-AUTH = "Basic cndzcHJheGlzcDpQcjR4MXMjdTVS"
+# AUTH = "Basic cndzcHJheGlzcDpQcjR4MXMjdTVS"
 
 payload = {
     "rqt": {
@@ -30,7 +30,7 @@ if st.button("Ejecutar 10 requests"):
                 URL,
                 json=payload,
                 headers={
-                    "Authorization": AUTH,
+                    #"Authorization": AUTH,
                     "Content-Type": "application/json"
                 },
                 timeout=30
