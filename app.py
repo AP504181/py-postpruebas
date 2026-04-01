@@ -4,6 +4,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 
 URL = "https://www.proinversion.mx:2180/mb/fileNet/cargaArchivo"
 #URL = "http://172.16.48.215:7080/mb/fileNet/cargaArchivo"
+#URL = "https://172.16.80.227:2180/mb/fileNet/cargaArchivo"
 
 # Credenciales (ya vienen en base64 normalmente, pero aquí lo dejamos directo)
 AUTH = "Basic cndzcHJheGlzcDpQcjR4MXMjdTVS"
