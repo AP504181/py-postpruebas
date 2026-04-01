@@ -1,9 +1,6 @@
-from flask import Flask, render_template, jsonify
+import streamlit as st
 import requests
-import base64
-from concurrent.futures import ThreadPoolExecutor
-
-app = Flask(__name__)
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 URL = "https://www.proinversion.mx:2180/mb/fileNet/cargaArchivo"
 
@@ -19,41 +16,31 @@ payload = {
     }
 }
 
-def hacer_peticion(i):
-    try:
-        response = requests.post(
-            URL,
-            json=payload,
-            headers={
-                "Authorization": AUTH,
-                "Content-Type": "application/json"
-            },
-            timeout=30
-        )
+st.title("🚀 Test de Peticiones POST")
 
-        return f"[{i}] Status: {response.status_code} - Response: {response.text[:200]}"
+if st.button("Ejecutar 10 requests"):
 
-    except Exception as e:
-        return f"[{i}] ERROR: {str(e)}"
-
-
-@app.route("/")
-def index():
-    return render_template("index.html")
-
-
-@app.route("/ejecutar", methods=["POST"])
-def ejecutar():
+    log_container = st.empty()
     logs = []
+
+    def hacer_peticion(i):
+        try:
+            response = requests.post(
+                URL,
+                json=payload,
+                headers={
+                    "Authorization": AUTH,
+                    "Content-Type": "application/json"
+                },
+                timeout=30
+            )
+            return f"[{i}] {response.status_code} - {response.text[:100]}"
+        except Exception as e:
+            return f"[{i}] ERROR: {str(e)}"
 
     with ThreadPoolExecutor(max_workers=10) as executor:
         futures = [executor.submit(hacer_peticion, i) for i in range(1, 11)]
 
-        for future in futures:
+        for future in as_completed(futures):
             logs.append(future.result())
-
-    return jsonify({"logs": logs})
-
-
-if __name__ == "__main__":
-    app.run(debug=True)
+            log_container.text("\n".join(logs))
