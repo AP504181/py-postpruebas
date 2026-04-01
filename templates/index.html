@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Ejecutor de Peticiones</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #1e1e1e;
+            color: #fff;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        button {
+            display: block;
+            margin: 20px auto;
+            padding: 12px 25px;
+            font-size: 16px;
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        #logs {
+            background-color: #000;
+            border: 1px solid #444;
+            padding: 15px;
+            height: 400px;
+            overflow-y: auto;
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
+
+        .loading {
+            text-align: center;
+            margin-top: 10px;
+            color: #00ffcc;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>🔥 Ejecución de Peticiones Concurrentes</h1>
+
+    <button onclick="ejecutar()">Ejecutar 10 Peticiones</button>
+
+    <div class="loading" id="loading" style="display:none;">
+        Ejecutando peticiones...
+    </div>
+
+    <div id="logs"></div>
+
+    <script>
+        function ejecutar() {
+            const logsDiv = document.getElementById("logs");
+            const loading = document.getElementById("loading");
+
+            logsDiv.innerHTML = "";
+            loading.style.display = "block";
+
+            fetch("/ejecutar", {
+                method: "POST"
+            })
+            .then(response => response.json())
+            .then(data => {
+                loading.style.display = "none";
+
+                data.logs.forEach(log => {
+                    logsDiv.innerHTML += log + "\n";
+                });
+
+                logsDiv.scrollTop = logsDiv.scrollHeight;
+            })
+            .catch(error => {
+                loading.style.display = "none";
+                logsDiv.innerHTML += "ERROR: " + error;
+            });
+        }
+    </script>
+
+</body>
+</html>
