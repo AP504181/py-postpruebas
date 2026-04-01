@@ -2,11 +2,11 @@ import streamlit as st
 import requests
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
-#URL = "https://www.proinversion.mx:2180/mb/fileNet/cargaArchivo"
-URL = "http://172.16.48.215:7080/mb/fileNet/cargaArchivo"
+URL = "https://www.proinversion.mx:2180/mb/fileNet/cargaArchivo"
+#URL = "http://172.16.48.215:7080/mb/fileNet/cargaArchivo"
 
 # Credenciales (ya vienen en base64 normalmente, pero aquí lo dejamos directo)
-# AUTH = "Basic cndzcHJheGlzcDpQcjR4MXMjdTVS"
+AUTH = "Basic cndzcHJheGlzcDpQcjR4MXMjdTVS"
 
 payload = {
     "rqt": {
@@ -19,7 +19,7 @@ payload = {
 
 st.title("🚀 Test de Peticiones POST")
 
-if st.button("Ejecutar 10 requests"):
+if st.button("Ejecutar 30 requests"):
 
     log_container = st.empty()
     logs = []
@@ -30,7 +30,7 @@ if st.button("Ejecutar 10 requests"):
                 URL,
                 json=payload,
                 headers={
-                    #"Authorization": AUTH,
+                    "Authorization": AUTH,
                     "Content-Type": "application/json"
                 },
                 timeout=30
@@ -39,8 +39,8 @@ if st.button("Ejecutar 10 requests"):
         except Exception as e:
             return f"[{i}] ERROR: {str(e)}"
 
-    with ThreadPoolExecutor(max_workers=10) as executor:
-        futures = [executor.submit(hacer_peticion, i) for i in range(1, 11)]
+    with ThreadPoolExecutor(max_workers=30) as executor:
+        futures = [executor.submit(hacer_peticion, i) for i in range(1, 31)]
 
         for future in as_completed(futures):
             logs.append(future.result())
