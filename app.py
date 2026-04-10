@@ -20,7 +20,7 @@ payload = {
 
 st.title("🚀 Test de Peticiones POST")
 
-if st.button("Ejecutar 10 requests"):
+if st.button("Ejecutar 30 requests"):
 
     log_container = st.empty()
     logs = []
@@ -40,8 +40,8 @@ if st.button("Ejecutar 10 requests"):
         except Exception as e:
             return f"[{i}] ERROR: {str(e)}"
 
-    with ThreadPoolExecutor(max_workers=10) as executor:
-        futures = [executor.submit(hacer_peticion, i) for i in range(1, 11)]
+    with ThreadPoolExecutor(max_workers=30) as executor:
+        futures = [executor.submit(hacer_peticion, i) for i in range(1, 31)]
 
         for future in as_completed(futures):
             logs.append(future.result())
